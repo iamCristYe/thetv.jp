@@ -28,7 +28,7 @@ def get_all_items(url: str, i: str) -> List[Tuple[str, str]]:
     Returns an empty list if none found.
     """
     headers = {"User-Agent": "Mozilla/5.0 (compatible; send_first_img/1.0)"}
-    resp = requests.get(f"{url}{i}", timeout=15, headers=headers)
+    resp = requests.get(f"{url}", timeout=15, headers=headers)
     resp.raise_for_status()
     soup = BeautifulSoup(resp.text, "html.parser")
 
@@ -107,7 +107,7 @@ def main():
         )
         sys.exit(2)
 
-    for i in range(1, 15):
+    for i in range(1, 2):
         try:
             items = get_all_items(URL, i)
         except Exception as e:
