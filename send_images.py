@@ -94,8 +94,8 @@ def send_file_telegram(
     caption: str,
 ):
     """Send a file as file via Telegram sendFile API."""
-    api = f"https://api.telegram.org/bot{bot_token}/sendFile"
-    files = {"file": (filename, file_bytes)}
+    api = f"https://api.telegram.org/bot{bot_token}/sendDocument"
+    files = {"document": (filename, file_bytes)}
     data = {"chat_id": chat_id, "caption": caption}
     resp = session.post(api, data=data, files=files, timeout=60)
     resp.raise_for_status()
