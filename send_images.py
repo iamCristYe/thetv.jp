@@ -85,7 +85,7 @@ def download_image_bytes(
     return content, name
 
 
-def send_photo_telegram(
+def send_file_telegram(
     session: requests.Session,
     bot_token: str,
     chat_id: str,
@@ -93,9 +93,9 @@ def send_photo_telegram(
     filename: str,
     caption: str,
 ):
-    """Send a file as photo via Telegram sendPhoto API."""
-    api = f"https://api.telegram.org/bot{bot_token}/sendPhoto"
-    files = {"photo": (filename, file_bytes)}
+    """Send a file as file via Telegram sendFile API."""
+    api = f"https://api.telegram.org/bot{bot_token}/sendFile"
+    files = {"file": (filename, file_bytes)}
     data = {"chat_id": chat_id, "caption": caption}
     resp = session.post(api, data=data, files=files, timeout=60)
     resp.raise_for_status()
@@ -135,11 +135,11 @@ def main():
                 continue
 
             try:
-                res = send_photo_telegram(
+                res = send_file_telegram(
                     session, token, chat_id, file_bytes, filename, caption
                 )
                 ok = res.get("ok")
-                print(f"  Sent as photo '{filename}', ok={ok}")
+                print(f"  Sent as file '{filename}', ok={ok}")
                 sent += 1
                 # extra pause after sending to be polite to Telegram
                 try:
