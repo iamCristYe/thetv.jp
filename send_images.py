@@ -33,12 +33,16 @@ def get_all_items(url: str, i: str) -> List[Tuple[str, str]]:
     soup = BeautifulSoup(resp.text, "html.parser")
 
     items = []
-    for div in soup.find_all("div", class_="photo-link-img"):
-        print(div)
-        a = div.find("a")
+    for li in soup.find_all("div", class_="newsimage")[0].find_all("li"):
+        print(li)
+        a = li.find("a")
         if not a or not a.get("href"):
             continue
-        src = "https://thetv.jp/" + a["href"].strip() + ".jpg"
+        src = (
+            "https://thetv.jp/"
+            + a["href"].strip()[:-1].replace("/news/detail/", "/i/nw/")
+            + ".jpg"
+        )
         print(src)
         # Normalize protocol-relative URLs
         if src.startswith("//"):
@@ -46,7 +50,7 @@ def get_all_items(url: str, i: str) -> List[Tuple[str, str]]:
         elif src.startswith("/"):
             src = requests.compat.urljoin(url, src)
 
-        img = div.find("img")
+        img = li.find("img")
         caption = img["alt"] if img else ""
         items.append((src, caption))
         print(items)
@@ -99,8 +103,8 @@ def send_photo_telegram(
 
 
 def main():
-    token = os.getenv("TELEGRAM_BOT_TOKEN")
-    chat_id = os.getenv("TELEGRAM_CHAT_ID")
+    token = os.getenv("TELEGRAM_BOT_TOKEN") or 1
+    chat_id = os.getenv("TELEGRAM_CHAT_ID") or 2
     if not token or not chat_id:
         print(
             "Please set TELEGRAM_BOT_TOKEN and TELEGRAM_CHAT_ID environment variables."
