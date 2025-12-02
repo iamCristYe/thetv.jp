@@ -136,7 +136,12 @@ def main():
 
             try:
                 res = send_file_telegram(
-                    session, token, chat_id, file_bytes, filename, caption
+                    session,
+                    token,
+                    chat_id,
+                    file_bytes,
+                    filename,
+                    f"{idx}/{len(items)}\n" + caption,
                 )
                 ok = res.get("ok")
                 print(f"  Sent as file '{filename}', ok={ok}")
